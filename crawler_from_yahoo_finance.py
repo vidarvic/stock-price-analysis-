@@ -1,7 +1,7 @@
 '''
 Dec 5, 2016
 Crawler from YAHOO finance
-
+Chi-Lun Mai
 '''
 
 from yahoo_finance import Share
@@ -25,6 +25,8 @@ with open('yahoo_2015.json', 'w') as f:
 
 # Store data in numpy-array form.
 import numpy as np
-yahoo_2015 = np.array(data.values())
+yahoo_2015 = np.empty((0,8))
+for i in range(200):
+    yahoo_2015 = np.vstack((yahoo_2015, np.array(data[i].values())))
 
 print yahoo_2015
