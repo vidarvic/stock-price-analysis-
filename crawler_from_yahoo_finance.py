@@ -24,9 +24,13 @@ with open('yahoo_2015.json', 'w') as f:
     json.dump(data, f)
 
 # Store data in numpy-array form.
+# Delete the non-number data(Volume, Symbol, Date).
 import numpy as np
-yahoo_2015 = np.empty((0,8))
+yahoo_2015 = np.empty((0,5))
 for i in range(200):
-    yahoo_2015 = np.vstack((yahoo_2015, np.array(data[i].values())))
+    del data[i]['Volume']
+    del data[i]['Symbol']
+    del data[i]['Date']
+	yahoo_2015 = np.vstack((yahoo_2015, np.array(data[i].values())))
 
 print yahoo_2015
