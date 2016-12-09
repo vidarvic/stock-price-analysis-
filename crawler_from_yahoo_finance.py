@@ -50,11 +50,12 @@ for i in range(len(data)-1):
 # Convert the type of data.
 yahoo_target = yahoo_target.astype(float)
 yahoo_feature_t1 = yahoo_feature_t1.astype(float)	
+
 '''
-Machine Learning
+Linear Regression
 '''
 
-#%matplotlib inline
+#%matplotlib inline for ipython
 from sklearn import datasets
 from sklearn.cross_validation import cross_val_predict
 from sklearn import linear_model
@@ -64,20 +65,44 @@ lr = linear_model.LinearRegression()
 y = yahoo_target
 predicted = cross_val_predict(lr, yahoo_feature_t1, y, cv=10)
 
+# Creat LR-pkl.
 from sklearn.externals import joblib
 joblib.dump(lr,"./lr_machine.pkl")
+lr = joblib.load("./lr_machine.pkl")
 
-
-lr=joblib.load("./lr_machine.pkl")
-
+# Predict the sample 3.
 lr.fit(yahoo_feature_t1, y)
 predict_y=lr.predict(yahoo_feature_t1[2])
 
-
+# Draw a picture.
 plt.scatter(predicted, y, s=2)
 plt.plot(predict_y, predict_y, 'ro')
-
 plt.plot([y.min(), y.max()], [y.min(), y.max()], 'k--', lw=2)
-
 plt.xlabel('Predicted')
 plt.ylabel('Measured')
+plt.show()
+
+'''
+Machine Learning(SVR)
+'''
+
+from sklearn.svm import SVR
+
+X = yahoo_feature_t1
+clf = SVR(kernel='rbf', C=1e3, gamma=0.1)
+clf.fit(X, y)
+
+# Creat SVR pkl.
+joblib.dump(clf,"./machine_SVR.pkl")
+clf=joblib.load("./machine_SVR.pkl")
+
+predict_y=clf.predict(yahoo_feature_t1[2])
+predict=clf.predict(X)
+print('score =',clf.score(X, y))
+
+plt.scatter(predict,y,s=2)
+plt.plot(predict_y, predict_y, 'ro')
+plt.plot([y.min(), y.max()], [y.min(), y.max()], 'k--', lw=2)
+plt.xlabel('Predicted')
+plt.ylabel('Measured')
+plt.show()
